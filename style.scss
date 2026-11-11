@@ -1,0 +1,184 @@
+// Dəyişənlər
+$bg: #0b1d3a;
+$green: #1e7a46;
+$green-lit: #34b36c;
+$trunk: #6b4226;
+$star-off: #b8a24a;
+$star-on: #ffe45c;
+$snow: #f4f8ff;
+
+$tree-width: 300px;
+$tree-height: 420px;
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: $bg;
+  font-family: system-ui, sans-serif;
+}
+
+.scene {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.hint {
+  color: #cfe0ff;
+  margin: 0 0 24px;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.tree {
+  position: relative;
+  width: $tree-width;
+  height: $tree-height;
+  transition: filter 0.4s;
+
+  &.lit {
+    filter: drop-shadow(0 0 14px rgba(255, 228, 92, 0.65));
+
+    .layer { background: $green-lit; }
+    .star { background: $star-on; }
+  }
+}
+
+// Qatlar (üçbucaqlar)
+@mixin layer($w, $h, $top) {
+  width: $w;
+  height: $h;
+  top: $top;
+}
+
+.layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $green;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: background 0.4s;
+
+  &-1 { @include layer(140px, 140px, 40px); }
+  &-2 { @include layer(220px, 160px, 110px); }
+  &-3 { @include layer(300px, 180px, 190px); }
+}
+
+.trunk {
+  position: absolute;
+  left: 50%;
+  top: 370px;
+  width: 40px;
+  height: 50px;
+  transform: translateX(-50%);
+  background: $trunk;
+}
+
+// Ulduz
+.star {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  transform: translateX(-50%);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+  background: $star-off;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transition: background 0.4s, transform 0.2s;
+
+  &:hover { transform: translateX(-50%) scale(1.1); }
+}
+
+// Oyuncaqlar
+.ornament {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  background: radial-gradient(circle at 30% 30%, #fff 0, var(--c) 45%, #00000055 100%);
+
+  &.fall {
+    animation: fall 1s ease-in forwards;
+    pointer-events: none;
+  }
+}
+
+@keyframes fall {
+  0%   { transform: translate(0, 0); animation-timing-function: ease-in; }
+  60%  { transform: translate(calc(var(--dx) * 0.7), var(--drop)); animation-timing-function: ease-out; }
+  78%  { transform: translate(calc(var(--dx) * 0.85), calc(var(--drop) - 22px)); animation-timing-function: ease-in; }
+  100% { transform: translate(var(--dx), var(--drop)); }
+}
+
+// Yer
+.ground {
+  width: 100%;
+  height: 40px;
+  background: $snow;
+  position: relative;
+  z-index: 0;
+}
+
+.reset {
+  margin: 16px 0;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #2b4a80;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover { background: #3a60a5; }
+};
+/* ---------- İşıq zənciri ---------- */
+.bulb {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0.25;
+  z-index: 1;
+  transition: opacity 0.4s;
+}
+.tree.lit .bulb {
+  opacity: 1;
+  box-shadow: 0 0 8px 2px var(--c);
+  animation: twinkle 1.2s ease-in-out infinite alternate;
+  animation-delay: var(--d);
+}
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Qar ---------- */
+.snow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+.flake {
+  position: absolute;
+  top: -10px;
+  border-radius: 50%;
+  background: #fff;
+  animation: snowfall linear infinite;
+}
+@keyframes snowfall {
+  from { transform: translate(0, -10px); }
+  to   { transform: translate(var(--sway), 105vh); }
+}

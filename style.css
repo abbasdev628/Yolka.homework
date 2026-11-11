@@ -1,0 +1,201 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b1d3a;
+  font-family: system-ui, sans-serif;
+}
+
+.scene {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.hint {
+  color: #cfe0ff;
+  margin: 0 0 24px;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.tree {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  transition: filter 0.4s;
+}
+.tree.lit {
+  filter: drop-shadow(0 0 14px rgba(255, 228, 92, 0.65));
+}
+.tree.lit .layer {
+  background: #34b36c;
+}
+.tree.lit .star {
+  background: #ffe45c;
+}
+
+.layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e7a46;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: background 0.4s;
+}
+.layer-1 {
+  width: 140px;
+  height: 140px;
+  top: 40px;
+}
+.layer-2 {
+  width: 220px;
+  height: 160px;
+  top: 110px;
+}
+.layer-3 {
+  width: 300px;
+  height: 180px;
+  top: 190px;
+}
+
+.trunk {
+  position: absolute;
+  left: 50%;
+  top: 370px;
+  width: 40px;
+  height: 50px;
+  transform: translateX(-50%);
+  background: #6b4226;
+}
+
+.star {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  transform: translateX(-50%);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+  background: #b8a24a;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transition: background 0.4s, transform 0.2s;
+}
+.star:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.ornament {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  background: radial-gradient(circle at 30% 30%, #fff 0, var(--c) 45%, rgba(0, 0, 0, 0.3333333333) 100%);
+}
+.ornament.fall {
+  animation: fall 1s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate(0, 0);
+    animation-timing-function: ease-in;
+  }
+  60% {
+    transform: translate(calc(var(--dx) * 0.7), var(--drop));
+    animation-timing-function: ease-out;
+  }
+  78% {
+    transform: translate(calc(var(--dx) * 0.85), calc(var(--drop) - 22px));
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translate(var(--dx), var(--drop));
+  }
+}
+.ground {
+  width: 100%;
+  height: 40px;
+  background: #f4f8ff;
+  position: relative;
+  z-index: 0;
+}
+
+.reset {
+  margin: 16px 0;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #2b4a80;
+  color: #fff;
+  cursor: pointer;
+}
+.reset:hover {
+  background: #3a60a5;
+}
+
+/* ---------- İşıq zənciri ---------- */
+.bulb {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0.25;
+  z-index: 1;
+  transition: opacity 0.4s;
+}
+
+.tree.lit .bulb {
+  opacity: 1;
+  box-shadow: 0 0 8px 2px var(--c);
+  animation: twinkle 1.2s ease-in-out infinite alternate;
+  animation-delay: var(--d);
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* ---------- Qar ---------- */
+.snow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.flake {
+  position: absolute;
+  top: -10px;
+  border-radius: 50%;
+  background: #fff;
+  animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+  from {
+    transform: translate(0, -10px);
+  }
+  to {
+    transform: translate(var(--sway), 105vh);
+  }
+}/*# sourceMappingURL=style.css.map */
